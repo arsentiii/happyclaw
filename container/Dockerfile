@@ -7,6 +7,11 @@ FROM node:22-slim
 # NOTE: Keep this layer BEFORE `COPY --from=ghcr.io/astral-sh/uv:latest` so that
 # uv:latest digest churn (frequent releases) does not invalidate this ~440MB layer.
 # See issue #403.
+# 切换到国内 Debian 镜像源（deb.debian.org 经 Fastly CDN 在 CN 网络下常 502/超时）
+# 用 HTTP 而非 HTTPS：node:22-slim 默认无 ca-certificates，HTTPS 会握手失败
+RUN sed -i 's|http://deb.debian.org|http://mirrors.aliyun.com|g; s|http://security.debian.org|http://mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources 2>/dev/null \
+    || sed -i 's|http://deb.debian.org|http://mirrors.aliyun.com|g; s|http://security.debian.org|http://mirrors.aliyun.com|g' /etc/apt/sources.list
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     # --- Browser & fonts ---
     chromium \
