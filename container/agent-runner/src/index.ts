@@ -19,7 +19,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { execFileSync } from 'child_process';
 import { createRequire } from 'module';
-import { query, HookCallback, PreCompactHookInput, createSdkMcpServer } from '@anthropic-ai/claude-agent-sdk';
+import { query, HookCallback, PreCompactHookInput, createSdkMcpServer, type Query } from '@anthropic-ai/claude-agent-sdk';
 import { detectImageMimeTypeFromBase64Strict } from './image-detector.js';
 import { pruneProcessedHistoryImagesInTranscript as pruneProcessedHistoryImagesInTranscriptFile } from './history-image-prune.js';
 import { getChannelFromJid } from './channel-prefixes.js';
@@ -1283,7 +1283,7 @@ async function runQuery(
   let resultReceivedAt: number | null = null;
   const POST_RESULT_TIMEOUT_MS = 5_000;
   // queryRef is set just before the for-await loop so pollIpcDuringQuery can call interrupt()
-  let queryRef: { interrupt(): Promise<void> } | null = null;
+  let queryRef: Query | null = null;
   let messageCount = 0;
   let resultCount = 0;
   let postResultInterruptRequested = false;

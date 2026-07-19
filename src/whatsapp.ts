@@ -375,7 +375,7 @@ export function createWhatsAppConnection(
         const selfJid = sock?.user?.id ? jidNormalizedUser(sock.user.id) : null;
         if (!selfJid) return;
         const involvesSelf = update.participants.some(
-          (p) => jidNormalizedUser(p) === selfJid,
+          (p) => jidNormalizedUser(p.id) === selfJid,
         );
         if (!involvesSelf) return;
 
